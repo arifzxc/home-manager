@@ -1,21 +1,19 @@
 #!/bin/bash
 #beta test
 
-user=$(whoami)
-su $user 
+sudo apt install tmux -y
+sleep 5
 
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
-sleep 5
-nixinstall=". /home/$user/.nix-profile/etc/profile.d/nix.sh"
+sleep 2
+nixinstall=". $HOME/.nix-profile/etc/profile.d/nix.sh"
+sleep 2
 echo $nixinstall >> .bashrc
-
-exit
 sleep 2
 
-nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-sleep 1
-nix-channel --update
-sleep 2
 
-nix-shell '<home-manager>' -A install
+tmux new -d 'nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager ; sleep 3 ; nix-channel --update ; sleep 2 ; nix-shell '<home-manager>' -A install'
+
+echo "Install home-manager successfull!"
+
 
